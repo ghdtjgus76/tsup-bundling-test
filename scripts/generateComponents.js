@@ -8,9 +8,25 @@ if (!fs.existsSync(componentsDir)) {
 }
 
 const componentTemplate = (componentName) => `
-import PropTypes from 'prop-types';
+import React, { ChangeEvent } from 'react';
 
-const ${componentName} = ({ label, value, onChange, placeholder, type, required }) => {
+interface ${componentName}Props {
+  label: string;
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  type?: 'text' | 'password' | 'email' | 'number';
+  required?: boolean;
+}
+
+const ${componentName}: React.FC<${componentName}Props> = ({
+  label,
+  value,
+  onChange,
+  placeholder = '',
+  type = 'text',
+  required = false,
+}) => {
   return (
     <div style={styles.container}>
       <label style={styles.label} htmlFor="${componentName.toLowerCase()}">
@@ -27,21 +43,6 @@ const ${componentName} = ({ label, value, onChange, placeholder, type, required 
       />
     </div>
   );
-};
-
-${componentName}.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-  type: PropTypes.oneOf(['text', 'password', 'email', 'number']),
-  required: PropTypes.bool,
-};
-
-${componentName}.defaultProps = {
-  placeholder: '',
-  type: 'text',
-  required: false,
 };
 
 export default ${componentName};
@@ -67,7 +68,7 @@ const styles = {
 for (let i = 1; i <= 50; i++) {
   const componentName = `TextField${i}`;
   const componentContent = componentTemplate(componentName);
-  const componentPath = path.join(componentsDir, `${componentName}.jsx`);
+  const componentPath = path.join(componentsDir, `${componentName}.tsx`);
 
   fs.writeFileSync(componentPath, componentContent, "utf8");
 }
