@@ -8,14 +8,14 @@ if (!fs.existsSync(componentsDir)) {
 }
 
 const componentTemplate = (componentName) => `
-import React from 'react';
 import PropTypes from 'prop-types';
-import './${componentName}.css';
 
 const ${componentName} = ({ label, value, onChange, placeholder, type, required }) => {
   return (
-    <div className="${componentName.toLowerCase()}-container">
-      <label htmlFor="${componentName.toLowerCase()}">텍스트필드</label>
+    <div style={styles.container}>
+      <label style={styles.label} htmlFor="${componentName.toLowerCase()}">
+        {label}
+      </label>
       <input
         id="${componentName.toLowerCase()}"
         type={type}
@@ -23,7 +23,7 @@ const ${componentName} = ({ label, value, onChange, placeholder, type, required 
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="${componentName.toLowerCase()}-input"
+        style={styles.input}
       />
     </div>
   );
@@ -45,25 +45,23 @@ ${componentName}.defaultProps = {
 };
 
 export default ${componentName};
-`;
 
-const cssTemplate = (componentName) => `
-.${componentName.toLowerCase()}-container {
-  margin-bottom: 1rem;
-}
-
-.${componentName.toLowerCase()}-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-}
-
-.${componentName.toLowerCase()}-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+const styles = {
+  container: {
+    marginBottom: '1rem',
+  },
+  label: {
+    display: 'block',
+    marginBottom: '0.5rem',
+    fontWeight: 'bold',
+  },
+  input: {
+    width: '100%',
+    padding: '0.5rem',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+  },
+};
 `;
 
 for (let i = 1; i <= 50; i++) {
@@ -71,11 +69,7 @@ for (let i = 1; i <= 50; i++) {
   const componentContent = componentTemplate(componentName);
   const componentPath = path.join(componentsDir, `${componentName}.jsx`);
 
-  const cssContent = cssTemplate(componentName);
-  const cssPath = path.join(componentsDir, `${componentName}.css`);
-
   fs.writeFileSync(componentPath, componentContent, "utf8");
-  fs.writeFileSync(cssPath, cssContent, "utf8");
 }
 
 console.log("50개의 텍스트 필드 컴포넌트가 생성되었습니다.");
