@@ -1,11 +1,13 @@
 {
   "name": "tsup-test",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "generate:components": "node ./scripts/generateComponents.js"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
